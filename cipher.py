@@ -20,6 +20,7 @@ class Cipher:
     def encrypt(self, text, key=None):
         """
         :param text: A string of the message to encrypt.
+        :param key: A key (type varies between the cipher) to change the encryption.
         :return: The encrypted text as a string.
         """
         print("Encrypting '" + text + "'...")

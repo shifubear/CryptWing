@@ -80,12 +80,16 @@ class CaesarCipher(Cipher):
         :param key:
         :return:
         """
+        try:
+            key = int(key)
+        except:
+            return "To use the caesar cipher, the key must be an integer."
+
         if isinstance(key, int):
             cipher_text = ""
             for c in text:
                 cipher_text += self.shift_char(c, key)
             return cipher_text
-        return "To use the caesar cipher, the key must be an integer."
 
     def decrypt(self, text, key=None):
         if isinstance(key, int):
@@ -93,6 +97,10 @@ class CaesarCipher(Cipher):
             for c in text:
                 plain_text += self.shift_char(c, key)
             return plain_text
+        return "To use the caesar cipher, the key must be an integer."
+
+
+
 
 if __name__ == "__main__":
     t = TranspositionCipher()

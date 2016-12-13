@@ -6,7 +6,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import filedialog
 from CryptWing.cipher import Cipher
-from CryptWing.classical_ciphers import TranspositionCipher
+from CryptWing.classical_ciphers import TranspositionCipher, CaesarCipher
 
 LARGE_FONT = ("Verdana", 12)
 
@@ -116,7 +116,7 @@ class EncryptPage(tk.Frame):
         cipher_cbbox = ttk.Combobox(self, textvariable=self.cipher_name)
         cipher_cbbox['values'] = self.ciphers
         key_label = tk.Label(self, text="Key")
-        key_entry = tk.Entry(self)
+        self.key_entry = tk.Entry(self)
         encrypt_button = tk.Button(self, text="Encrypt", command=self.encrypt)
 
         preview_label = tk.Label(self, text="Preview")
@@ -137,7 +137,7 @@ class EncryptPage(tk.Frame):
         cipher_label.grid(row=4, column=0, columnspan=2, sticky='nsw')
         cipher_cbbox.grid(row=5, column=0, columnspan=2, sticky='nsew')
         key_label.grid(row=6, column=0, columnspan=2, sticky='nsw')
-        key_entry.grid(row=7, column=0, sticky='nsew')
+        self.key_entry.grid(row=7, column=0, sticky='nsew')
         encrypt_button.grid(row=7, column=1, sticky='nsew')
 
         preview_label.grid(row=0, column=2, columnspan=3, sticky='ns')
@@ -210,13 +210,17 @@ class EncryptPage(tk.Frame):
 
         if self.cipher_name.get() == 'Transposition Cipher':
             self.cipher = TranspositionCipher()
+        elif self.cipher_name.get() == 'Caesar Cipher':
+            self.cipher = CaesarCipher()
 
         if self.input_mode.get() == "text_mode":
             self.plain_text = self.input_text.get(1.0, tk.END)
         else:
             self.read_file()
 
-        self.cipher_text = self.cipher.encrypt(self.plain_text)
+        self.plain_text = "".join(self.plain_text.split())
+        key = self.key_entry.get()
+        self.cipher_text = self.cipher.encrypt(self.plain_text, key)
         self.preview_message['text'] = self.cipher_text
 
 
@@ -240,6 +244,12 @@ class DecryptPage(tk.Frame):
         self.ciphers = ('Transposition Cipher', 'Caesar Cipher', 'RSA Cipher')
         self.cipher_name = tk.StringVar()
 
+        self.grid_columnconfigure(0, minsize=400)
+        self.grid_columnconfigure(2, minsize=650)
+        self.grid_rowconfigure(2, minsize=150)
+        self.grid_rowconfigure(3, minsize=400)
+
+        # GUI elements
         file_path_label = tk.Label(self, text="file path")
         open_button = tk.Button(self, text="Open")
 
@@ -255,6 +265,11 @@ class DecryptPage(tk.Frame):
         key_entry = tk.Entry(self)
         decrypt_button = tk.Button(self, text="Decrypt")
 
+        preview_label = tk.Label(self, text="Preview")
+        self.preview_message = tk.Message(self, text="Provide text input or select a file to upload.")
+        back_button = tk.Button(self, text="Back")
+        save_button = tk.Button(self, text="Save")
+
         # Place widgets
         file_path_label.grid(row=0, column=0, sticky='nsw')
         open_button.grid(row=0, column=1, sticky='nsew')
@@ -268,6 +283,13 @@ class DecryptPage(tk.Frame):
         key_label.grid(row=6, column=0, columnspan=2, sticky='nsew')
         key_entry.grid(row=7, column=0, sticky='nsew')
         decrypt_button.grid(row=7, column=1, sticky='nsew')
+
+        preview_label.grid(row=0, column=2, sticky='ns')
+        self.preview_message.grid(row=1, column=2, rowspan=6, columnspan=3, sticky='nsew')
+        back_button.grid(row=7, column=3, sticky='nsew')
+        save_button.grid(row=7, column=4, sticky='nsew')
+
+
 
 
 
