@@ -6,7 +6,7 @@ class Analyzer:
         self.letter_dict = {}
         self.pair_dict = {}
 
-    def analyze(self, text):
+    def letter_count(self, text):
         """
 
         :param text:
@@ -22,4 +22,4 @@ class Analyzer:
 
 if __name__ == "__main__":
     a = Analyzer()
-    a.analyze("SHION FUKUZAWA")
+    a.letter_count("SHION FUKUZAWA")
