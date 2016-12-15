@@ -1,5 +1,4 @@
 import matplotlib
-matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
 import tkinter as tk
@@ -7,7 +6,7 @@ import tkinter.ttk as ttk
 from tkinter import filedialog
 from CryptWing.cipher import Cipher
 from CryptWing.classical_ciphers import TranspositionCipher, CaesarCipher
-
+matplotlib.use("TkAgg")
 LARGE_FONT = ("Verdana", 12)
 
 
@@ -241,6 +240,12 @@ class DecryptPage(tk.Frame):
         """
         tk.Frame.__init__(self, parent)
 
+        self.file_path = tk.StringVar()
+        self.cipher = Cipher()
+        self.cipher_text = ""
+        self.plain_text = ""
+        self.key_entry = ""
+
         self.ciphers = ('Transposition Cipher', 'Caesar Cipher', 'RSA Cipher')
         self.cipher_name = tk.StringVar()
 
@@ -250,10 +255,10 @@ class DecryptPage(tk.Frame):
         self.grid_rowconfigure(3, minsize=400)
 
         # GUI elements
-        file_path_label = tk.Label(self, text="file path")
-        open_button = tk.Button(self, text="Open")
+        self.file_path_label = tk.Label(self, text="file path")
+        open_button = tk.Button(self, text="Open", command=self.open_file)
 
-        analyze_button = tk.Button(self, text="Analyze")
+        analyze_button = tk.Button(self, text="Analyze", command=self.analyze)
 
         analysis_notebook = ttk.Notebook(self)
 
@@ -262,16 +267,16 @@ class DecryptPage(tk.Frame):
         cipher_cbbox['values'] = self.ciphers
 
         key_label = tk.Label(self, text="Key")
-        key_entry = tk.Entry(self)
-        decrypt_button = tk.Button(self, text="Decrypt")
+        self.key_entry = tk.Entry(self)
+        decrypt_button = tk.Button(self, text="Decrypt", command=self.decrypt)
 
         preview_label = tk.Label(self, text="Preview")
         self.preview_message = tk.Message(self, text="Provide text input or select a file to upload.")
-        back_button = tk.Button(self, text="Back")
-        save_button = tk.Button(self, text="Save")
+        back_button = tk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
+        save_button = tk.Button(self, text="Save", command=self.file_save)
 
         # Place widgets
-        file_path_label.grid(row=0, column=0, sticky='nsw')
+        self.file_path_label.grid(row=0, column=0, sticky='nsw')
         open_button.grid(row=0, column=1, sticky='nsew')
 
         analyze_button.grid(row=1, column=0, columnspan=2, sticky='nsew')
@@ -281,7 +286,7 @@ class DecryptPage(tk.Frame):
         cipher_cbbox.grid(row=5, column=0, columnspan=2, sticky='nsew')
 
         key_label.grid(row=6, column=0, columnspan=2, sticky='nsew')
-        key_entry.grid(row=7, column=0, sticky='nsew')
+        self.key_entry.grid(row=7, column=0, sticky='nsew')
         decrypt_button.grid(row=7, column=1, sticky='nsew')
 
         preview_label.grid(row=0, column=2, sticky='ns')
@@ -289,7 +294,49 @@ class DecryptPage(tk.Frame):
         back_button.grid(row=7, column=3, sticky='nsew')
         save_button.grid(row=7, column=4, sticky='nsew')
 
+    def open_file(self):
+        """
+        Method for self.open_button
+        Opens the file selector and returns selected file path into self.file_path_label
+        """
+        self.file_path = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")], initialdir='~', title="Title")
+        self.file_path_label["text"] = self.file_path
+        self.read_file()
 
+    def analyze(self):
+        pass
+
+    def read_file(self):
+        """
+        Converts file content into a string.
+        That content is saved into self.plain_text, then stripped of all white spaces.
+        :return:
+        """
+        self.cipher_text = ""
+        tfile = open(self.file_path)
+        for line in tfile:
+            self.cipher_text += line
+        self.cipher_text.strip()
+
+    def decrypt(self):
+        if self.cipher_name.get() == 'Transposition Cipher':
+            self.cipher = TranspositionCipher()
+        elif self.cipher_name.get() == 'Caesar Cipher':
+            self.cipher = CaesarCipher()
+        key = self.key_entry.get()
+        self.plain_text = self.cipher.decrypt(self.cipher_text, key)
+
+        self.preview_message['text'] = self.plain_text
+
+    def file_save(self):
+        """
+        Method for self.save_button
+        Allows user to save encrypted text with desired name
+        """
+        name = filedialog.asksaveasfile(mode='w', defaultextension=".txt")
+        text_to_save = str(self.plain_text)
+        name.write(text_to_save)
+        name.close()
 
 
 

@@ -92,15 +92,24 @@ class CaesarCipher(Cipher):
             return cipher_text
 
     def decrypt(self, text, key=None):
+        try:
+            key = int(key)
+        except:
+            return "To use the caesar cipher, the key must be an integer."
         if isinstance(key, int):
             plain_text = ""
             for c in text:
-                plain_text += self.shift_char(c, key)
+                plain_text += self.shift_char(c, 26 - key)
             return plain_text
-        return "To use the caesar cipher, the key must be an integer."
 
 
+class ViginereCipher(Cipher):
 
+    def encrypt(self, text, key=None):
+        pass
+
+    def decrypt(self, text, key=None):
+        pass
 
 if __name__ == "__main__":
     t = TranspositionCipher()
