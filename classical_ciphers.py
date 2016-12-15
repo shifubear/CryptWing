@@ -1,3 +1,10 @@
+"""
+
+
+Algorithms referenced from
+    http://practicalcryptography.com/
+"""
+
 from CryptWing.cipher import Cipher
 
 
@@ -104,7 +111,18 @@ class CaesarCipher(Cipher):
 
 
 class ViginereCipher(Cipher):
-
+    """
+    Algorithm:
+        The Viginere Cipher accepts a keyword as the key, then uses that to encrypt the message.
+        To encrypt the plaintext, repeat the keyword above the plaintext, then shift the plaintext
+        by number (of the corresponding key letter, converted to a number based on it's position in the
+        alphabet.
+        eg.
+            [key]: sushi
+            [plaintext]: Let's meet tonight in our usual meeting place.
+            [Comparison]:sushisushisushisushisushisushisushisushisushi
+                         dy
+    """
     def encrypt(self, text, key=None):
         pass
 
