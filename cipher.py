@@ -1,8 +1,17 @@
-"""
-Shion Fukuzawa (sf27)
-
-"""
-
+#
+# CS106 Final Project
+# CryptWing
+#
+# classical ciphers
+#
+# Shion Fukuzawa (sf27)
+# December 15, 2016
+#
+# This file implementations the base cipher class.
+#
+# Algorithms referenced from
+#    http://practicalcryptography.com/
+#
 
 class Cipher:
     """

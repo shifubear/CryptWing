@@ -1,6 +1,20 @@
+#
+# CS106 Final Project
+# CryptWing
+#
+# Analyzer class that never got the chance to fully be utilized on the GUI... yet
+#
+# Shion Fukuzawa (sf27)
+# December 15, 2016
+#
 
 
 class Analyzer:
+    """
+    Analyzer class
+    Currently capable of:
+        Counting letter frequency
+    """
     def __init__(self):
         self.text = ""
         self.letter_dict = {}
@@ -8,7 +22,7 @@ class Analyzer:
 
     def letter_count(self, text):
         """
-
+        Counts the number of seperate characters that exist in the file.
         :param text:
         :return:
         """

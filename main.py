@@ -1,8 +1,21 @@
+#
+# CS106 Final Project
+# CryptWing
+#
+# main file
+#
+# Shion Fukuzawa (sf27)
+# December 15, 2016
+#
+# Follow the project on GitHub
+#   https://github.com/shifubear/CryptWing
+#
+
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import filedialog
-from CryptWing.cipher import Cipher
-from CryptWing.classical_ciphers import TranspositionCipher, CaesarCipher, ViginereCipher
+from cipher import Cipher
+from classical_ciphers import TranspositionCipher, CaesarCipher, ViginereCipher, PlayfairCipher
 
 LARGE_FONT = ("Verdana", 12)
 
@@ -86,7 +99,7 @@ class EncryptPage(tk.Frame):
         """
         tk.Frame.__init__(self, parent)
 
-        self.ciphers = ('Transposition Cipher', 'Caesar Cipher', 'Viginere Cipher', 'RSA Cipher')
+        self.ciphers = ('Transposition Cipher', 'Caesar Cipher', 'Viginere Cipher', 'Playfair Cipher')
 
         self.input_mode = tk.StringVar()
         self.file_path = tk.StringVar()
@@ -207,6 +220,8 @@ class EncryptPage(tk.Frame):
             self.cipher = CaesarCipher()
         elif self.cipher_name.get() == 'Viginere Cipher':
             self.cipher = ViginereCipher()
+        elif self.cipher_name.get() == 'Playfair Cipher':
+            self.cipher = PlayfairCipher()
 
         if self.input_mode.get() == "text_mode":
             self.plain_text = self.input_text.get(1.0, tk.END)
@@ -242,7 +257,7 @@ class DecryptPage(tk.Frame):
         self.plain_text = ""
         self.key_entry = ""
 
-        self.ciphers = ('Transposition Cipher', 'Caesar Cipher', 'Viginere Cipher', 'RSA Cipher')
+        self.ciphers = ('Transposition Cipher', 'Caesar Cipher', 'Viginere Cipher', 'Playfair Cipher')
         self.cipher_name = tk.StringVar()
 
         self.grid_columnconfigure(0, minsize=400)
@@ -321,6 +336,8 @@ class DecryptPage(tk.Frame):
             self.cipher = CaesarCipher()
         elif self.cipher_name.get() == 'Viginere Cipher':
             self.cipher = ViginereCipher()
+        elif self.cipher_name.get() == 'Playfair Cipher':
+            self.cipher = PlayfairCipher()
 
         key = self.key_entry.get()
         self.plain_text = self.cipher.decrypt(self.cipher_text, key)
