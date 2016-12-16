@@ -2,7 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import filedialog
 from CryptWing.cipher import Cipher
-from CryptWing.classical_ciphers import TranspositionCipher, CaesarCipher
+from CryptWing.classical_ciphers import TranspositionCipher, CaesarCipher, ViginereCipher
 
 LARGE_FONT = ("Verdana", 12)
 
@@ -86,7 +86,7 @@ class EncryptPage(tk.Frame):
         """
         tk.Frame.__init__(self, parent)
 
-        self.ciphers = ('Transposition Cipher', 'Caesar Cipher', 'RSA Cipher')
+        self.ciphers = ('Transposition Cipher', 'Caesar Cipher', 'Viginere Cipher', 'RSA Cipher')
 
         self.input_mode = tk.StringVar()
         self.file_path = tk.StringVar()
@@ -205,6 +205,8 @@ class EncryptPage(tk.Frame):
             self.cipher = TranspositionCipher()
         elif self.cipher_name.get() == 'Caesar Cipher':
             self.cipher = CaesarCipher()
+        elif self.cipher_name.get() == 'Viginere Cipher':
+            self.cipher = ViginereCipher()
 
         if self.input_mode.get() == "text_mode":
             self.plain_text = self.input_text.get(1.0, tk.END)
@@ -240,7 +242,7 @@ class DecryptPage(tk.Frame):
         self.plain_text = ""
         self.key_entry = ""
 
-        self.ciphers = ('Transposition Cipher', 'Caesar Cipher', 'RSA Cipher')
+        self.ciphers = ('Transposition Cipher', 'Caesar Cipher', 'Viginere Cipher', 'RSA Cipher')
         self.cipher_name = tk.StringVar()
 
         self.grid_columnconfigure(0, minsize=400)
@@ -317,6 +319,9 @@ class DecryptPage(tk.Frame):
             self.cipher = TranspositionCipher()
         elif self.cipher_name.get() == 'Caesar Cipher':
             self.cipher = CaesarCipher()
+        elif self.cipher_name.get() == 'Viginere Cipher':
+            self.cipher = ViginereCipher()
+
         key = self.key_entry.get()
         self.plain_text = self.cipher.decrypt(self.cipher_text, key)
 

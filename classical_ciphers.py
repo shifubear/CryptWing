@@ -120,14 +120,57 @@ class ViginereCipher(Cipher):
         eg.
             [key]: sushi
             [plaintext]: Let's meet tonight in our usual meeting place.
-            [Comparison]:sushisushisushisushisushisushisushisushisushi
+            [Comparison]:sushi sush isushis us his ushis ushisus hisus
                          dy
     """
+
+    def __init__(self):
+        self.caesar = CaesarCipher()
+
+    def key_to_int(self, key):
+        key_list = []
+        # ASCII
+        #   0~9: 48~57
+        #   A~Z: 65~90
+        #   a~z: 97~122
+        for c in key:
+            if 48 <= ord(c) <= 57:
+                key_list.append(ord(c) - 48)
+            elif 65 <= ord(c) <= 90:
+                key_list.append(ord(c) - 65)
+            elif 97 <= ord(c) <= 122:
+                key_list.append(ord(c) - 97)
+            else:
+                pass
+
+        return key_list
+
     def encrypt(self, text, key=None):
-        pass
+        cipher_text = ""
+        key_list = self.key_to_int(key)
+
+        for i in range(0, len(text), len(key_list)):
+            for j in range(len(key_list)):
+                try:
+                    cipher_text += self.caesar.encrypt(text[i + j], key_list[j])
+                except IndexError:
+                    break
+        return cipher_text
 
     def decrypt(self, text, key=None):
-        pass
+        plain_text = ""
+        keys = self.key_to_int(key)
+        key_list = []
+        for key in keys:
+            key_list.append(26 - key)
+
+        for i in range(0, len(text), len(key_list)):
+            for j in range(len(key_list)):
+                try:
+                    plain_text += self.caesar.encrypt(text[i + j], key_list[j])
+                except IndexError:
+                    break
+        return plain_text
 
 if __name__ == "__main__":
     t = TranspositionCipher()
